@@ -1,0 +1,18 @@
+//
+//  Debug.xcconfig
+//  CarBuddy_Alert
+//
+//  Created by agmcoder on 9/23/25.
+//
+// App Configuration
+APP_DISPLAY_NAME = CarBuddy_Alert
+BUNDLE_ID_SUFFIX =
+
+// App Icon
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
+
+// Swift Compilation Conditions
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = PROD_ENVIRONMENT
+
+// Preprocessor Definitions
+GCC_PREPROCESSOR_DEFINITIONS = PROD_ENVIRONMENT=1
