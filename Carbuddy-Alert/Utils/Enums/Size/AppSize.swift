@@ -25,6 +25,64 @@ struct AppSize {
         case thick = 3.0
     }
     
+    // MARK: - Heights
+    enum Height: CGFloat {
+        case lowest
+        case low
+        case normal
+        case medium
+        case high
+        case maxHeight
+        case statusBar
+        case button
+        case textField
+        case signInLogo
+        
+        var value: CGFloat {
+            switch self {
+            case .lowest: return 12
+            case .low: return 35
+            case .normal: return 40
+            case .medium: return 60
+            case .high: return 80
+            case .maxHeight: return .infinity
+            case .statusBar: return 20
+            case .button: return 44
+            case .textField: return 48
+            case .signInLogo: return 150
+            }
+        }
+    }
+    
+    // MARK: - Widths
+    enum Width {
+        case lowest
+        case low
+        case normal
+        case medium
+        case high
+        case maxWidth
+        case statusBar
+        case button
+        case textField
+        case signInLogo
+        
+        var value: CGFloat {
+            switch self {
+            case .lowest: return 20
+            case .low: return 35
+            case .normal: return 50
+            case .medium: return 100
+            case .high: return 150
+            case .maxWidth: return .infinity
+            case .statusBar: return 20
+            case .button: return 44
+            case .textField: return 200
+            case .signInLogo: return 150
+            }
+        }
+    }
+    
     // MARK: - View Sizes
     enum ViewSize: CGFloat {
         case lowest = 12
@@ -35,40 +93,6 @@ struct AppSize {
         case highest = 100
     }
     
-    // MARK: - Heights
-    enum Height: CGFloat {
-        case lowest = 12
-        case low = 35
-        case normal = 40
-        case medium = 50
-        case high = 80
-        case button = 44
-        case textField = 48
-        case statusBar = 20
-    }
-    
-    // MARK: - Widths
-    enum Width {
-        case lowest
-        case low
-        case normal
-        case medium
-        case high
-        case screen
-        case maxWidth
-        
-        var value: CGFloat {
-            switch self {
-            case .lowest: return 20
-            case .low: return 35
-            case .normal: return 50
-            case .medium: return 100
-            case .high: return 150
-            case .screen: return 300
-            case .maxWidth: return .infinity
-            }
-        }
-    }
     
     // MARK: - Spacing System
     enum Spacing: CGFloat {
@@ -97,8 +121,8 @@ struct AppSize {
         case lowest = 4.0
         case low = 8.0
         case medium = 10.0
-        case normal = 12.0
-        case high = 15.0
+        case normal = 15.0
+        case high = 30.0
     }
     
     // MARK: - Shadow Radius
@@ -115,6 +139,12 @@ struct AppSize {
         case medium = 24
         case large = 32
         case xLarge = 40
+    }
+    
+    enum ButtonSize: CGFloat {
+        case small = 44
+        case medium = 56
+        case large = 68
     }
 }
 

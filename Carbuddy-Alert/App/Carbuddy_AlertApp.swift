@@ -15,7 +15,3 @@ struct Carbuddy_AlertApp: App {
         }
     }
 }
-
-#Preview {
-    ContentView()
-}
