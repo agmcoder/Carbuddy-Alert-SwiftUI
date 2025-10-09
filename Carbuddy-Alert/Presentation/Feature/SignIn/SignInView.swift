@@ -49,7 +49,6 @@ struct SignInView: View {
     
     private var titleSection: some View {
         VStack(spacing: AppSize.spacing(.medium)) {
-<<<<<<< HEAD
             Group{
                 Text(.signInTittle)
                     .font(.largeTitle)
@@ -59,22 +58,10 @@ struct SignInView: View {
                     .font(.title2)
                     .fontWeight(.heavy)
             }
-            .foregroundStyle(.secondaryText)
         }
         .padding(.bottom, AppSize.defaultPadding)
         .padding(.top, AppSize.defaultPadding)
-=======
-            Text(.signInTittle)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
-            Text(.signInSubtitle)
-                .font(.title2)
-                .fontWeight(.heavy)
-        }
-        .padding(.bottom, AppSize.defaultPadding)
->>>>>>> 08be4c5acf4a6f3d914753946030ae63243c6d21
-    }
+}
     
     private var authButtonsSection: some View {
         VStack(spacing: AppSize.spacing(.medium)) {

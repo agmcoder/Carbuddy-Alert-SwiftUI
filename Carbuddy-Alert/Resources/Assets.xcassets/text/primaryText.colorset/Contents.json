@@ -5,15 +5,9 @@
         "color-space" : "display-p3",
         "components" : {
           "alpha" : "1.000",
-<<<<<<<< HEAD:Carbuddy-Alert/Resources/Assets.xcassets/text/primaryText.colorset/Contents.json
-          "blue" : "0x04",
-          "green" : "0x04",
-          "red" : "0x04"
-========
           "blue" : "0xFF",
           "green" : "0xFF",
           "red" : "0xFF"
->>>>>>>> 08be4c5acf4a6f3d914753946030ae63243c6d21:Carbuddy-Alert/Resources/Assets.xcassets/Color/googleWhite.colorset/Contents.json
         }
       },
       "idiom" : "universal"
@@ -29,15 +23,9 @@
         "color-space" : "display-p3",
         "components" : {
           "alpha" : "1.000",
-<<<<<<<< HEAD:Carbuddy-Alert/Resources/Assets.xcassets/text/primaryText.colorset/Contents.json
-          "blue" : "0x04",
-          "green" : "0x04",
-          "red" : "0x04"
-========
-          "blue" : "0xFF",
-          "green" : "0xFF",
-          "red" : "0xFF"
->>>>>>>> 08be4c5acf4a6f3d914753946030ae63243c6d21:Carbuddy-Alert/Resources/Assets.xcassets/Color/googleWhite.colorset/Contents.json
+          "blue" : "0xDC",
+          "green" : "0xDC",
+          "red" : "0xDC"
         }
       },
       "idiom" : "universal"

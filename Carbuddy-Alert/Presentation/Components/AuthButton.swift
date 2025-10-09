@@ -72,9 +72,9 @@ enum AuthProvider: CaseIterable {
     
     var textColor: Color {
         switch self {
-        case .google: return Color.primaryText
-        case .apple: return Color.secondaryText
-        case .email: return Color.primaryText
+        case .google: return Color.black
+        case .apple: return Color.white
+        case .email: return Color.black
         }
     }
 }
