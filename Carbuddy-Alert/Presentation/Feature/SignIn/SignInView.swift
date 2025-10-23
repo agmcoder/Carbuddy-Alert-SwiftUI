@@ -9,9 +9,12 @@ import SwiftUI
 
 struct SignInView: View {
     // MARK: - Properties
-    @State private var isRadarPulseAnimating = false
-    @State private var isLogoPulseAnimating = false
     
+    @StateObject private var viewModel: SignInViewModel
+    
+    init(viewModel: SignInViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     // MARK: - Body
     var body: some View {
         ZStack {
@@ -33,7 +36,7 @@ struct SignInView: View {
     }
     
     private var contentView: some View {
-        VStack(alignment: .center, spacing: AppSize.spacing(.medium)) {
+        VStack(spacing: AppSize.spacing(.medium)) {
             animatedLogoContainer
             titleSection
             authButtonsSection
@@ -61,13 +64,13 @@ struct SignInView: View {
         }
         .padding(.bottom, AppSize.defaultPadding)
         .padding(.top, AppSize.defaultPadding)
-}
+    }
     
     private var authButtonsSection: some View {
         VStack(spacing: AppSize.spacing(.medium)) {
             ForEach(AuthProvider.allCases, id: \.self) { provider in
                 AuthButton(
-                    action: { handleAuth(for: provider) },
+                    action: {  },
                     provider: provider
                 )
             }
@@ -92,80 +95,20 @@ struct SignInView: View {
     private var radarAnimation: some View {
         GeometryReader { geometry in
             RadarWaveAnimation(
-                isAnimating: isRadarPulseAnimating,
+                isAnimating: viewModel.isRadarPulseAnimating,
                 size: min(geometry.size.width, geometry.size.height)
             )
         }
     }
     
     private var logoAnimation: some View {
-        LogoView(isPulsing: isLogoPulseAnimating)
+        LogoView(isPulsing: viewModel.isLogoPulseAnimating)
     }
     
     // MARK: - Actions
     private func startAnimations() {
-        isRadarPulseAnimating = true
-        isLogoPulseAnimating = true
-    }
-    
-    private func handleAuth(for provider: AuthProvider) {
-        // Aquí iría la lógica de autenticación
-        // Podría ser un ViewModel o un Coordinator
-        print("Authenticating with \(provider.title)")
-    }
-}
-
-// MARK: - Subviews
-private struct RadarWaveAnimation: View {
-    let isAnimating: Bool
-    let size: CGFloat
-    
-    private var baseDiameter: CGFloat { size * 0.2 }
-    private var maxScale: CGFloat { size / baseDiameter }
-    
-    var body: some View {
-        ZStack {
-            ForEach(0..<3, id: \.self) { index in
-                Circle()
-                    .stroke(.white.opacity(0.6), lineWidth: 3)
-                    .frame(width: baseDiameter, height: baseDiameter)
-                    .scaleEffect(isAnimating ? maxScale : 1.0)
-                    .opacity(isAnimating ? 0.0 : 1.0)
-                    .animation(
-                        .easeOut(duration: 3)
-                        .repeatForever(autoreverses: false)
-                        .delay(Double(index) * 1.0),
-                        value: isAnimating
-                    )
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-}
-
-private struct LogoView: View {
-    let isPulsing: Bool
-    
-    var body: some View {
-        ZStack {
-            Text("🐾")
-                .font(.system(size: 60))
-            
-            Group {
-                Circle()
-                    .foregroundStyle(.white)
-                    .frame(width: 50)
-                Text("📍")
-            }
-            .font(.system(size: 30))
-            .offset(x: 25, y: -30)
-            .scaleEffect(isPulsing ? 1.2 : 1.0)
-            .animation(
-                .easeInOut(duration: 2)
-                .repeatForever(autoreverses: true),
-                value: isPulsing
-            )
-        }
+        viewModel.isRadarPulseAnimating = true
+        viewModel.isLogoPulseAnimating = true
     }
 }
 

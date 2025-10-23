@@ -44,13 +44,13 @@ struct AuthButton: View {
 enum AuthProvider: CaseIterable {
     case google
     case apple
-    case email
+//    case email
     
     var title: String {
         switch self {
         case .google: return "Google"
         case .apple: return "Apple"
-        case .email: return "Email"
+//        case .email: return "Email"
         }
     }
     
@@ -58,7 +58,7 @@ enum AuthProvider: CaseIterable {
         switch self {
         case .google: return Image(.googleLogo)
         case .apple: return Image(.appleLogo)
-        case .email: return Image(.emailIcon)
+//        case .email: return Image(.emailIcon)
         }
     }
     
@@ -66,7 +66,7 @@ enum AuthProvider: CaseIterable {
         switch self {
         case .google: return Color.googleWhite
         case .apple: return Color.appleBlack
-        case .email: return Color.clear
+//        case .email: return Color.clear
         }
     }
     
@@ -74,7 +74,7 @@ enum AuthProvider: CaseIterable {
         switch self {
         case .google: return Color.black
         case .apple: return Color.white
-        case .email: return Color.black
+//        case .email: return Color.black
         }
     }
 }
@@ -85,7 +85,7 @@ enum AuthProvider: CaseIterable {
         VStack {
             AuthButton(action: {}, provider: .apple)
             AuthButton(action: {}, provider: .google)
-            AuthButton(action: {}, provider: .email)
+//            AuthButton(action: {}, provider: .email)
         }
     }
 }
