@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-private struct RadarWaveAnimation: View {
+struct RadarWaveAnimation: View {
     let isAnimating: Bool
     let size: CGFloat
     

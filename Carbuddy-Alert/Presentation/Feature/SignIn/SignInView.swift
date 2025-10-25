@@ -114,7 +114,7 @@ struct SignInView: View {
 
 // MARK: - Previews
 #Preview {
-    SignInView()
+    SignInView(viewModel: SignInViewModel(signInUseCase: AuthUseCaseStrategy()))
 }
 //    ZStack {
 //        Color.blue

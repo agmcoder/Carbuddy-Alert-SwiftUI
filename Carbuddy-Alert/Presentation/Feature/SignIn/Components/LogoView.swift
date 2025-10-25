@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-private struct LogoView: View {
+struct LogoView: View {
     let isPulsing: Bool
     
     var body: some View {
