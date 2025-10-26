@@ -16,13 +16,10 @@ enum LogPrivacy {
 }
 
 enum LogLevel: String {
-    case trace
     case debug
     case info
-    case notice
-    case warning
     case error
-    case critical
+    case fault
 }
 
 enum LogCategory: String {
@@ -34,12 +31,12 @@ enum LogCategory: String {
 
 protocol Loggable {
     func log(_ level: LogLevel,
-                 _ message: String,
-                 _ privacy: LogPrivacy,
-                 metadata: [String: Any]?,
-                 file: String,
-                 function: String,
-                 line: Int)
+             _ message: String,
+             _ privacy: LogPrivacy,
+             metadata: [String: Any]?,
+             file: String,
+             function: String,
+             line: Int)
 }
 
 protocol LogLevelLoggable {
@@ -50,14 +47,6 @@ protocol LogLevelLoggable {
              file: String,
              function: String,
              line: Int)
-    
-    func trace(_ message: @autoclosure () -> String,
-               metadata: @autoclosure () -> [String: Any]?,
-               privacy: LogPrivacy,
-               source: @autoclosure () -> String?,
-               file: String,
-               function: String,
-               line: UInt)
     
     func debug(_ message: @autoclosure () -> String,
                metadata: @autoclosure () -> [String: Any]?,
@@ -75,22 +64,6 @@ protocol LogLevelLoggable {
               function: String,
               line: UInt)
     
-    func notice(_ message: @autoclosure () -> String,
-                metadata: @autoclosure () -> [String: Any]?,
-                privacy: LogPrivacy,
-                source: @autoclosure () -> String?,
-                file: String,
-                function: String,
-                line: UInt)
-    
-    func warning(_ message: @autoclosure () -> String,
-                 metadata: @autoclosure () -> [String: Any]?,
-                 privacy: LogPrivacy,
-                 source: @autoclosure () -> String?,
-                 file: String,
-                 function: String,
-                 line: UInt)
-    
     func error(_ message: @autoclosure () -> String,
                metadata: @autoclosure () -> [String: Any]?,
                privacy: LogPrivacy,
@@ -99,13 +72,13 @@ protocol LogLevelLoggable {
                function: String,
                line: UInt)
     
-    func critical(_ message: @autoclosure () -> String,
-                  metadata: @autoclosure () -> [String: Any]?,
-                  privacy: LogPrivacy,
-                  source: @autoclosure () -> String?,
-                  file: String,
-                  function: String,
-                  line: UInt)
+    func fault(_ message: @autoclosure () -> String,
+               metadata: @autoclosure () -> [String: Any]?,
+               privacy: LogPrivacy,
+               source: @autoclosure () -> String?,
+               file: String,
+               function: String,
+               line: UInt)
     
 }
 
@@ -115,10 +88,10 @@ protocol LogCategoryInferable {
 
 protocol LogMessageFormattable {
     func formatMessage(_ message: String,
-                          metadata: [String: Any]?,
-                          file: String,
-                          function: String,
-                          line: Int) -> String
+                       metadata: [String: Any]?,
+                       file: String,
+                       function: String,
+                       line: Int) -> String
 }
 
 protocol LogLevelFilterable {
@@ -128,7 +101,7 @@ protocol LogLevelFilterable {
              using logger: os.Logger)
 }
 
-final class OSLogger: LogLevelLoggable {
+final class LoggerService: LogLevelLoggable {
     
     private let loggers: [LogCategory: os.Logger]
     private let categoryInferer: LogCategoryInferable
@@ -193,10 +166,10 @@ struct LogCategoryInterferer: LogCategoryInferable {
 
 struct LogMessageFormatter: LogMessageFormattable {
     func formatMessage(_ message: String,
-                      metadata: [String: Any]?,
-                      file: String,
-                      function: String,
-                      line: Int) -> String {
+                       metadata: [String: Any]?,
+                       file: String,
+                       function: String,
+                       line: Int) -> String {
         
         let fileName = (file as NSString).lastPathComponent
         let location = "[\(fileName):\(line)] \(function)"
@@ -219,43 +192,39 @@ struct LogLevelFilterer: LogLevelFilterable {
         let finalMessage = addEmojiIfNeeded(to: message, for: level)
         
         switch level {
-        case .trace:
-            logMessage(finalMessage, privacy: privacy, using: logger.debug)
         case .debug:
-            logMessage(finalMessage, privacy: privacy, using: logger.debug)
+            switch privacy {
+            case .auto: logger.log(level: .debug, "\(finalMessage, privacy: .auto)")
+            case .public: logger.log(level: .debug, "\(finalMessage, privacy: .public)")
+            case .private: logger.log(level: .debug, "\(finalMessage, privacy: .private)")
+            case .sensitive: logger.log(level: .debug, "\(finalMessage, privacy: .sensitive)")
+            }
         case .info:
-            logMessage(finalMessage, privacy: privacy, using: logger.info)
-        case .notice:
-            logMessage(finalMessage, privacy: privacy, using: logger.notice)
-        case .warning:
-            logMessage(finalMessage, privacy: privacy, using: logger.warning)
+            switch privacy {
+            case .auto: logger.log(level: .info, "\(finalMessage, privacy: .auto)")
+            case .public: logger.log(level: .info, "\(finalMessage, privacy: .public)")
+            case .private: logger.log(level: .info, "\(finalMessage, privacy: .private)")
+            case .sensitive: logger.log(level: .info, "\(finalMessage, privacy: .sensitive)")
+            }
         case .error:
-            logMessage(finalMessage, privacy: privacy, using: logger.error)
-        case .critical:
-            logMessage(finalMessage, privacy: privacy, using: logger.critical)
-        }
+            switch privacy {
+            case .auto: logger.log(level: .error, "\(finalMessage, privacy: .auto)")
+            case .public: logger.log(level: .error, "\(finalMessage, privacy: .public)")
+            case .private: logger.log(level: .error, "\(finalMessage, privacy: .private)")
+            case .sensitive: logger.log(level: .error, "\(finalMessage, privacy: .sensitive)")
+            }
+        case .fault:
+            switch privacy {
+            case .auto: logger.log(level: .fault, "\(finalMessage, privacy: .auto)")
+            case .public: logger.log(level: .fault, "\(finalMessage, privacy: .public)")
+            case .private: logger.log(level: .fault, "\(finalMessage, privacy: .private)")
+            case .sensitive: logger.log(level: .fault, "\(finalMessage, privacy: .sensitive)")
+            }        }
     }
-    
-    private func logMessage(_ message: String,
-                            privacy: LogPrivacy,
-                            using logFunction: (OSLogMessage) -> Void) {
-        switch privacy {
-        case .auto:
-            logFunction("\(message, privacy: .auto)")
-        case .public:
-            logFunction("\(message, privacy: .public)")
-        case .private:
-            logFunction("\(message, privacy: .private)")
-        case .sensitive:
-            logFunction("\(message, privacy: .sensitive)")
-        }
-    }
-    
     private func addEmojiIfNeeded(to message: String, for level: LogLevel) -> String {
         switch level {
-        case .warning: return "⚠️ \(message)"
         case .error: return "❌ \(message)"
-        case .critical: return "🔥 \(message)"
+        case .fault: return "🔥 \(message)"
         default: return message
         }
     }
@@ -263,16 +232,6 @@ struct LogLevelFilterer: LogLevelFilterable {
 
 // MARK: - Log Level extension
 extension LogLevelLoggable {
-    func trace(_ message: @autoclosure () -> String,
-               metadata: @autoclosure () -> [String: Any]? = nil,
-               privacy: LogPrivacy = .auto,
-               source: @autoclosure () -> String? = nil,
-               file: String = #file,
-               function: String = #function,
-               line: UInt = #line) {
-        log(.trace, message(), privacy, metadata: metadata(), file: file, function: function, line: Int(line))
-    }
-    
     func debug(_ message: @autoclosure () -> String,
                metadata: @autoclosure () -> [String: Any]? = nil,
                privacy: LogPrivacy = .auto,
@@ -293,26 +252,6 @@ extension LogLevelLoggable {
         log(.info, message(), privacy, metadata: metadata(), file: file, function: function, line: Int(line))
     }
     
-    func notice(_ message: @autoclosure () -> String,
-                metadata: @autoclosure () -> [String: Any]? = nil,
-                privacy: LogPrivacy = .auto,
-                source: @autoclosure () -> String? = nil,
-                file: String = #file,
-                function: String = #function,
-                line: UInt = #line) {
-        log(.notice, message(), privacy, metadata: metadata(), file: file, function: function, line: Int(line))
-    }
-    
-    func warning(_ message: @autoclosure () -> String,
-                 metadata: @autoclosure () -> [String: Any]? = nil,
-                 privacy: LogPrivacy = .auto,
-                 source: @autoclosure () -> String? = nil,
-                 file: String = #file,
-                 function: String = #function,
-                 line: UInt = #line) {
-        log(.warning, message(), privacy, metadata: metadata(), file: file, function: function, line: Int(line))
-    }
-    
     func error(_ message: @autoclosure () -> String,
                metadata: @autoclosure () -> [String: Any]? = nil,
                privacy: LogPrivacy = .auto,
@@ -323,13 +262,13 @@ extension LogLevelLoggable {
         log(.error, message(), privacy, metadata: metadata(), file: file, function: function, line: Int(line))
     }
     
-    func critical(_ message: @autoclosure () -> String,
-                  metadata: @autoclosure () -> [String: Any]? = nil,
-                  privacy: LogPrivacy = .auto,
-                  source: @autoclosure () -> String? = nil,
-                  file: String = #file,
-                  function: String = #function,
-                  line: UInt = #line) {
-        log(.critical, message(), privacy, metadata: metadata(), file: file, function: function, line: Int(line))
+    func fault(_ message: @autoclosure () -> String,
+               metadata: @autoclosure () -> [String: Any]? = nil,
+               privacy: LogPrivacy = .auto,
+               source: @autoclosure () -> String? = nil,
+               file: String = #file,
+               function: String = #function,
+               line: UInt = #line) {
+        log(.fault, message(), privacy, metadata: metadata(), file: file, function: function, line: Int(line))
     }
 }
