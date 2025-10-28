@@ -8,14 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    private let SignInViewModel: SignInViewModel = .init(signInUseCase: () as! AuthUseCase)
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        SignInView(viewModel: <#SignInViewModel#>)
     }
 }
 

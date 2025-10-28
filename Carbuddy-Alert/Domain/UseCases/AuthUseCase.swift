@@ -5,12 +5,18 @@
 //  Created by agmcoder on 10/22/25.
 //
 
-protocol AuthUseCase {
-    func execute(with provider: AuthProvider) async -> Bool
+protocol SignInUseCaseProtocol {
+    func execute(with provider: AuthProvider)
 }
 
-final class AuthUseCaseStrategy: AuthUseCase {
-    func execute(with provider: AuthProvider) async -> Bool {
-        return true
+final class SignInUseCase: SignInUseCaseProtocol {
+    private let authManager: AuthManager
+    
+    init(authManager: AuthManager) {
+        self.authManager = authManager
+    }
+    
+    func execute(with provider: AuthProvider) {
+        
     }
 }
